@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: microservice-goods
+---
+spring:
+  profiles: goods-zone1
+# 服务器默认端口
+# ribbon client
+# 可通过在启动时设置vm 参数来修改运行端口，VM options: -Dserver.port=8181 override port
+server:
+  port: 8090
+eureka:
+  instance:
+    hostname: peer1
+    #更改注册过程通告以主机名进行注册
+    prefer-ip-address: false
+    # https://....
+    status-page-url-path: http://${eureka.instance.hostname}/actuator/info
+    health-check-url: http://${eureka.instance.hostname}/actuator/health
+    home-page-url: http://${eureka.instance.hostname}/
+    #调整故障节点清理间隔
+    lease-renewal-interval-in-seconds: 10     #表示 Eureka Client 发送心跳给 server 端的频率。默认 30 秒
+    lease-expiration-duration-in-seconds: 10  #表示 Eureka Server 至上一次收到 client 的心跳之后，等待下一次心跳的超时时间，在这个时间内若没收到下一次心跳，则移除该 Instance。默认 90 秒
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://peer2:8762/eureka/,http://peer1:8761/eureka/
+    healthcheck:
+      enabled: true  #健康检查
+---
+spring:
+  profiles: goods-zone2
+server:
+  port: 8091
+eureka:
+  instance:
+    hostname: peer2
+    prefer-ip-address: false
+    status-page-url-path: http://${eureka.instance.hostname}/actuator/info
+    health-check-url: http://${eureka.instance.hostname}/actuator/health
+    home-page-url: http://${eureka.instance.hostname}/
+    #调整故障节点清理间隔
+    lease-renewal-interval-in-seconds: 10     #表示 Eureka Client 发送心跳给 server 端的频率。默认 30 秒
+    lease-expiration-duration-in-seconds: 10  #表示 Eureka Server 至上一次收到 client 的心跳之后，等待下一次心跳的超时时间，在这个时间内若没收到下一次心跳，则移除该 Instance。默认 90 秒
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://peer1:8761/eureka/,http://peer2:8762/eureka/
+    healthcheck:
+      enabled: true     #健康检查

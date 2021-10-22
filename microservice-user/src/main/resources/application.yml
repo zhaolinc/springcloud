@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: microservice-user
+server:
+  port: 8070
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      defaultZone: http://peer1:8761/eureka/,http://peer2:8762/eureka/
+#ribbon:
+#  ConnectTimeout: 1000
+#  ReadTimeout: 3000               #服务请求处理超时时间（毫秒）
+#  OkToRetryOnAllOperations: true  #对超时请求启用重试机制
+#  MaxAutoRetriesNextServer: 1     #切换重试实例的最大个数
+#  MaxAutoRetries: 3               #切换实例后重试最大次数
+#  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #修改负载均衡算法
+feign:
+  circuitbreaker:
+    enabled: true
